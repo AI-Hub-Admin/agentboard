@@ -58,11 +58,9 @@ ab.summary.messages(
 
 agentboard messages visualization as chat
 
-![agentboard summary messages function]()
-
+![agentboard summary messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_chat_visualizer.jpg?raw=true)
 
 [See full details of ab.summary.messages](docs/summary_messages.md)
-
 
 
 
@@ -103,7 +101,7 @@ ab.summary.tool(
 
 agentboard tool visualization
 
-![agentboard tool function]()
+![agentboard tool function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_tool.jpg?raw=true)
 
 
 [See full details of ab.summary.tool](docs/summary_tool.md)
@@ -147,7 +145,7 @@ ab.summary.text(
 
 agentboard text visualization
 
-![agentboard text messages function]()
+![agentboard text function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_text.jpg?raw=true)
 
 
 [See full details of ab.summary.text](docs/summary_text.md)
@@ -192,7 +190,7 @@ ab.summary.dict(
 
 agentboard dict visualization
 
-![agentboard dict messages function]()
+![agentboard dict function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_dict.jpg?raw=true)
 
 
 [See full details of ab.summary.dict](docs/summary_dict.md)
@@ -241,7 +239,7 @@ ab.summary.image(
 
 agentboard image visualization
 
-![agentboard image messages function]()
+![agentboard image messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_image.jpg?raw=true)
 
 
 [See full details of ab.summary.image](docs/summary_image.md)
@@ -290,7 +288,7 @@ ab.summary.audio(
 
 agentboard audio visualization
 
-![agentboard audio messages function]()
+![agentboard audio messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_audio.jpg?raw=true)
 
 
 [See full details of ab.summary.audio](docs/summary_audio.md)
@@ -343,9 +341,82 @@ ab.summary.video(
 
 agentboard video visualization
 
-![agentboard video messages function]()
+![agentboard video messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_video.jpg?raw=true)
 
 [See full details of ab.summary.video](docs/summary_video.md)
 
 
+
+
+## Agents Related Pipeline Workflow and Document
+### AI Services Reviews and Ratings <br>
+##### AI Agent
+[Microsoft AI Agents Reviews](http://www.deepnlp.org/store/pub/pub-microsoft-ai-agent) <br>
+[Claude AI Agents Reviews](http://www.deepnlp.org/store/pub/pub-claude-ai-agent) <br>
+[OpenAI AI Agents Reviews](http://www.deepnlp.org/store/pub/pub-openai-ai-agent) <br>
+[AgentGPT AI Agents Reviews](http://www.deepnlp.org/store/pub/pub-agentgpt) <br>
+[Saleforce AI Agents Reviews](http://www.deepnlp.org/store/pub/pub-salesforce-ai-agent) <br>
+##### Chatbot
+[OpenAI o1 Reviews](http://www.deepnlp.org/store/pub/pub-openai-o1) <br>
+[ChatGPT User Reviews](http://www.deepnlp.org/store/pub/pub-chatgpt-openai) <br>
+[Gemini User Reviews](http://www.deepnlp.org/store/pub/pub-gemini-google) <br>
+[Perplexity User Reviews](http://www.deepnlp.org/store/pub/pub-perplexity) <br>
+[Claude User Reviews](http://www.deepnlp.org/store/pub/pub-claude-anthropic) <br>
+[Qwen AI Reviews](http://www.deepnlp.org/store/pub/pub-qwen-alibaba) <br>
+[Doubao Reviews](http://www.deepnlp.org/store/pub/pub-doubao-douyin) <br>
+[ChatGPT Strawberry](http://www.deepnlp.org/store/pub/pub-chatgpt-strawberry) <br>
+[Zhipu AI Reviews](http://www.deepnlp.org/store/pub/pub-zhipu-ai) <br>
+##### AI Image Generation
+[Midjourney User Reviews](http://www.deepnlp.org/store/pub/pub-midjourney) <br>
+[Stable Diffusion User Reviews](http://www.deepnlp.org/store/pub/pub-stable-diffusion) <br>
+[Runway User Reviews](http://www.deepnlp.org/store/pub/pub-runway) <br>
+[GPT-5 Forecast](http://www.deepnlp.org/store/pub/pub-gpt-5) <br>
+[Flux AI Reviews](http://www.deepnlp.org/store/pub/pub-flux-1-black-forest-lab) <br>
+[Canva User Reviews](http://www.deepnlp.org/store/pub/pub-canva) <br>
+##### AI Video Generation
+[Luma AI](http://www.deepnlp.org/store/pub/pub-luma-ai) <br>
+[Pika AI Reviews](http://www.deepnlp.org/store/pub/pub-pika) <br>
+[Runway AI Reviews](http://www.deepnlp.org/store/pub/pub-runway) <br>
+[Kling AI Reviews](http://www.deepnlp.org/store/pub/pub-kling-kwai) <br>
+[Dreamina AI Reviews](http://www.deepnlp.org/store/pub/pub-dreamina-douyin) <br>
+##### AI Education
+[Coursera Reviews](http://www.deepnlp.org/store/pub/pub-coursera) <br>
+[Udacity Reviews](http://www.deepnlp.org/store/pub/pub-udacity) <br>
+[Grammarly Reviews](http://www.deepnlp.org/store/pub/pub-grammarly) <br>
+##### Robotics
+[Tesla Cybercab Robotaxi](http://www.deepnlp.org/store/pub/pub-tesla-cybercab) <br>
+[Tesla Optimus](http://www.deepnlp.org/store/pub/pub-tesla-optimus) <br>
+[Figure AI](http://www.deepnlp.org/store/pub/pub-figure-ai) <br>
+[Unitree Robotics Reviews](http://www.deepnlp.org/store/pub/pub-unitree-robotics) <br>
+[Waymo User Reviews](http://www.deepnlp.org/store/pub/pub-waymo-google) <br>
+[ANYbotics Reviews](http://www.deepnlp.org/store/pub/pub-anybotics) <br>
+[Boston Dynamics](http://www.deepnlp.org/store/pub/pub-boston-dynamic) <br>
+##### AI Tools
+[DeepNLP AI Tools](http://www.deepnlp.org/store/pub/pub-deepnlp-ai) <br>
+##### AI Widgets
+[Apple Glasses](http://www.deepnlp.org/store/pub/pub-apple-glasses) <br>
+[Meta Glasses](http://www.deepnlp.org/store/pub/pub-meta-glasses) <br>
+[Apple AR VR Headset](http://www.deepnlp.org/store/pub/pub-apple-ar-vr-headset) <br>
+[Google Glass](http://www.deepnlp.org/store/pub/pub-google-glass) <br>
+[Meta VR Headset](http://www.deepnlp.org/store/pub/pub-meta-vr-headset) <br>
+[Google AR VR Headsets](http://www.deepnlp.org/store/pub/pub-google-ar-vr-headset) <br>
+##### Social
+[Character AI](http://www.deepnlp.org/store/pub/pub-character-ai) <br>
+##### Self-Driving
+[BYD Seal](http://www.deepnlp.org/store/pub/pub-byd-seal) <br>
+[Tesla Model 3](http://www.deepnlp.org/store/pub/pub-tesla-model-3) <br>
+[BMW i4](http://www.deepnlp.org/store/pub/pub-bmw-i4) <br>
+[Baidu Apollo Reviews](http://www.deepnlp.org/store/pub/pub-baidu-apollo) <br>
+[Hyundai IONIQ 6](http://www.deepnlp.org/store/pub/pub-hyundai-ioniq-6) <br>
+
+### Related Blogs <br>
+[DeepNLP AI Agents Designing Guidelines](http://www.deepnlp.org/blog?category=agent) <br>
+[Introduction to multimodal generative models](http://www.deepnlp.org/blog/introduction-to-multimodal-generative-models) <br>
+[Generative AI Search Engine Optimization](http://www.deepnlp.org/blog/generative-ai-search-engine-optimization-how-to-improve-your-content) <br>
+[AI Image Generator User Reviews](http://www.deepnlp.org/store/image-generator) <br>
+[AI Video Generator User Reviews](http://www.deepnlp.org/store/video-generator) <br>
+[AI Chatbot & Assistant Reviews](http://www.deepnlp.org/store/chatbot-assistant) <br>
+[Best AI Tools User Reviews](http://www.deepnlp.org/store/pub/) <br>
+[AI Boyfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-boyfriend) <br>
+[AI Girlfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-girlfriend) <br>
 
