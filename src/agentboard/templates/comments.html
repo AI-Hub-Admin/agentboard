@@ -1,0 +1,23 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments List</title>
+</head>
+<body>
+    <h1>Comments List</h1>
+    <ul>
+        {% for item in items %}
+            <li>
+                <span>Comment to Id: {{ item.to_id }}</span>
+                <span>log_time : {{ item.log_time }}</span>
+                <span>user_id: {{ item.user_id }}</span>
+                <span>content: {{ item.content }}</span>
+                <span>ext_info: {{ item.ext_info }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
