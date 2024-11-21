@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart Builder</title>
+    
+<!--     <link rel="stylesheet" href="workflow_styles.css">
+    <script src="workflow_script.js"></script>  
+ -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/workflow_styles.css') }}">
+    <script src="{{ url_for('static', filename='js/workflow_script.js') }}"></script>  
+
+</head>
+<body>
+  <h1>Agent Workflow</h1>
+  <div id="toolbar">
+    <div class="draggable shape rectangle" draggable="true">Process</div>
+    <div class="draggable shape diamond" draggable="true">Decision</div>
+  </div>
+  <div id="canvas">
+    <svg id="lines"></svg>
+  </div>
+</body>
+</html>
