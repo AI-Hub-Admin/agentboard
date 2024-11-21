@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentBoard Flowchart</title>
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/agent_board_log.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/common.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/workflow_styles.css') }}">
+    <script src="{{ url_for('static', filename='js/workflow_script.js') }}"></script>  
+
+    <script type="text/javascript">
+      
+        function setSideBar() {
+            // body...
+            // Get the elements
+            const sidebar = document.getElementById('sidebar');
+            const openBtn = document.getElementById('open-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const mainContent = document.getElementById('main-content');
+
+            // Open sidebar function
+            openBtn.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                mainContent.classList.add('shifted');
+            });
+
+            // Close sidebar function
+            closeBtn.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                mainContent.classList.remove('shifted');
+            });
+        };
+        
+        window.onload = function() {
+            // format workflow
+            format_workflow_group();
+
+            // set side
+            setSideBar();
+        };
+
+    </script>
+
+</head>
+<body>
+    <h1>Flowchart</h1>
+    <!-- Sidebar -->
+    <div class="sidebar open" id="sidebar">
+        <span class="close-btn" id="close-btn">&times;</span>
+        <a href="/log">AgentBoard</a>
+        {% for data_type in types %}
+            <a href="/log/{{data_type}}"> {{ data_type }}</a>
+        {% endfor %}
+        <a href="/log/agent_loop">agent loop</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content shifted" id="main-content">
+        <!-- Button to open the sidebar -->
+        <button class="open-btn" id="open-btn">&#9776;</button>
+        <h1>AgentBoard Workflow</h1>
+        <div id="alert_box">
+            <div id="alert_box_middle_wrapper">
+                <img id="bgImg" onclick="bgImgClick()">
+                <span id="closeButton" onclick="bgImgClick();" style="position: absolute; top: 0; right: 0; font-size: 18px; color:white; padding: 5px;"><strong>X</strong></span>
+            </div>
+        </div>
+        
+
+        <div class="div_workflow_wrapper">
+            <!-- workflow canvas section -->
+            <div id="toolbar">
+              <div class="draggable shape rectangle" draggable="true">Process</div>
+              <div class="draggable shape diamond" draggable="true">Decision</div>
+            </div>
+            <div id="canvas">
+              <svg id="lines">
+              </svg>
+                {% for agent_name, log_dict_list in data.items() %}
+
+                    <div id="div_workflow_agent_{{ loop.index }}" class="div_workflow_agent" agent_name="{{ agent_name }}" >
+
+                        <!-- 0. agent name as text -->
+                        <div class="draggable shape workflow_text placed div_workflow_shape" draggable="true" process_id="agent_name" >{{ agent_name }}</div>
+
+                        {% for log_dict in log_dict_list %}
+                            
+                            {% if log_dict.workflow_type == "decision" %}
+                                <!-- decision process -->
+                                <div class="draggable shape diamond placed div_workflow_shape" draggable="true" process_id="{{log_dict.process_id}}" >
+                                    <div class="tooltip">
+                                        <div>{{ log_dict.name }}</div>
+                                        <div class="tooltiptext">
+                                            {{ log_dict.data }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            
+                            {% elif log_dict.workflow_type == "text" %}
+                                
+                                <div class="draggable shape workflow_text placed div_workflow_shape" draggable="true" process_id="{{log_dict.process_id}}" >
+                                    <div class="tooltip">
+                                        <div>{{ log_dict.name }}</div>
+                                        <div class="tooltiptext">
+                                            {{ log_dict.data }}
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            {% elif log_dict.workflow_type == "start" %}
+                                <div class="draggable shape rectangle_radius placed div_workflow_shape" draggable="true" process_id="{{log_dict.process_id}}" >{{ log_dict.name }}</div>
+
+                            {% elif log_dict.workflow_type == "end" %}
+                                <div class="draggable shape rectangle_radius placed div_workflow_shape" draggable="true" process_id="{{log_dict.process_id}}" >{{ log_dict.name }}</div>
+
+                            {% else %}
+                                <!-- normal process -->
+                                
+                                <div class="draggable shape rectangle placed div_workflow_shape" draggable="true" process_id="{{log_dict.process_id}}" >
+                                    <div class="tooltip">
+                                        <div>{{ log_dict.name }}</div>
+                                        <div class="tooltiptext">
+                                            {{ log_dict.data }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+</html>
