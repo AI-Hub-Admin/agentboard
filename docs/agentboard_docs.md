@@ -16,7 +16,7 @@ You can install and import the 'agentboard' python package and use functions und
 |  [**ab.summary.image**](#absummaryimage)  | tensor |   Support both torch.Tensor and tf.Tensor,  torch.Tensor takes input shape [N, C, H, W], N: Batch Size, C: Channels, H: Height, W: Width; tf.Tensor, input shape [N, H, W, C], N: Batch Size, H: Height, W: Width, C: Channels.  |
 |  [**ab.summary.audio**](#absummaryaudio)   | tensor |  Support torch.Tensor data type. The input tensor shape [B, C, N], B for batch size, C for channel, N for samples. |
 |  [**ab.summary.video**](#absummaryvideo)  | tensor |  Support torch.Tensor data type. The input tensor shape should match [T, H, W, C], T: Number of frames, H: Height, W: Width, C: Number of channels (usually 3 for RGB) |
-
+|  [**ab.summary.agent_loop**](#absummaryagent_loop)  | str |  AI Agent Loop Visualization|
 
 ### `ab.summary.messages`
 - **Description**: Write LLM chat history as list of message with keys 'role' and 'content' to logs and display in a web chatbot for visualization. The data format of messages is 
@@ -106,6 +106,46 @@ agentboard tool visualization
 
 [See full details of ab.summary.tool](docs/summary_tool.md)
 
+
+### `ab.summary.agent_loop`
+- **Description**: Write Video Tensor Data (pytorch torch.Tensor) to logs and export video files to static folder. 
+
+```
+    
+ab.summary.video(
+    name: str, 
+    data: torch.Tensor, 
+    agent_name: str,
+    process_id: str,
+    **kwargs
+)
+
+
+```
+
+- **Arguments**:
+  - `name` (str): Name of the Audio Tensor Data.
+  - `data` (Tensor): Support torch.Tensor data type. The input tensor shape should match [T, H, W, C], T: Number of frames, H: Height, W: Width, C: Number of channels (usually 3 for RGB)
+  - `agent_name` (str): Name of Agent, agent_name is the unique id to identify the workflows of each individual agent in the multi-agent environment.
+  - `process_id` (str): The defined process id of agent loop, such as PLAN, ACT, REFLECT, REACT. The process id will be used to group workflow shapes of the agent loop, such as grouping all the workflows in the "PLAN" stage. 
+
+  Optional
+  - `workflow_type` (str):  process/decision/etc/start/end for different visualization display
+
+
+- **Returns**:
+  The messages will write one line of log in json dict format with below keys: 
+
+  - `name` (str): Name of the Audio Clip.
+  - `data` (str): The output file path of video clips of tensors in the static file folder for agentboard display.
+  - `data_type` (str): video.
+  - `timestamp` (str): timestamp of running the function.
+  - `workflow_id` (str): an unique id of UUID4() indicating one step in the agent loop workflow.
+  - `workflow_type` (str): process/decision/etc/start/end for different visualization display.
+  - `agent_name` (str): agent_name is used to identify by workflows belonging to which agent.
+  - `process_id` (str): process_id is used to group by several workflow_id, such as in PLAN stage, Act stage, etc.
+
+![agentboard agent loop workflow](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
 
 
 ### `ab.summary.text`
@@ -239,7 +279,7 @@ ab.summary.image(
 
 agentboard image visualization
 
-![agentboard image messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_image.jpg?raw=true)
+![agentboard image function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_image.jpg?raw=true)
 
 
 [See full details of ab.summary.image](docs/summary_image.md)
@@ -288,7 +328,7 @@ ab.summary.audio(
 
 agentboard audio visualization
 
-![agentboard audio messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_audio.jpg?raw=true)
+![agentboard audio function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_audio.jpg?raw=true)
 
 
 [See full details of ab.summary.audio](docs/summary_audio.md)
@@ -341,10 +381,9 @@ ab.summary.video(
 
 agentboard video visualization
 
-![agentboard video messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_video.jpg?raw=true)
+![agentboard video function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
 
 [See full details of ab.summary.video](docs/summary_video.md)
-
 
 
 
