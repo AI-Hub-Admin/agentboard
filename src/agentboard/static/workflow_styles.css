@@ -1,0 +1,127 @@
+#toolbar {
+  display: grid;
+  grid-template-columns: 150px 150px 150px 150px;
+  grid-column-gap: 20px;
+  margin-bottom: 30px;
+}
+
+.shape {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: grab;
+}
+
+.rectangle {
+  background-color: #51be95;
+  color: white;
+  border: 2px solid #3d9b77;
+  border-radius: 5px;
+}
+
+
+.rectangle_radius {
+  background-color: #51be95;
+  color: white;
+  border: 2px solid #3d9b77;
+  border-radius: 25px;
+}
+
+
+.diamond {
+  width: 60px;
+  height: 60px;
+  background-color: #f2a65a;
+  color: white;
+  border: 2px solid #d08845;
+  transform: rotate(45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.diamond span {
+  transform: rotate(-45deg);
+}
+
+.workflow_text {
+  width: 100px;
+  height: 60px;
+  color: black;
+  border: 0px solid #d08845;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#canvas {
+  width: 80%;
+  height: 600px;
+  border: 2px dashed #ccc;
+  position: relative;
+  background: #f9f9f9;
+  
+  /*overflow: hidden;*/
+
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.line {
+  stroke: black;
+  stroke-width: 2;
+}
+
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -100px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
