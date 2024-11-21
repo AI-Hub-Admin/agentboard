@@ -2,6 +2,8 @@
 
 DeepNLP AgentBoard provides the visualization and tooling to visualize and monitor the agent loops and key entities of AI Agents development, such as messages, tools/functions, workflow and raw data types including text, dict or json, image, audio, video, etc. 
 
+![agentboard agent loop workflow](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
+
 ## Key Features
 - Easy APIs to log various data types for LLM calling and AI Agent development: text, dict or json, image, audio, video, etc. 
 - AI Agent Key Entities Visualization: Visualize key entities of chat history messages, memories, tools/functions schema and input/output dict, etc.
@@ -9,7 +11,6 @@ DeepNLP AgentBoard provides the visualization and tooling to visualize and monit
 - Multi-Agents Support
 - Autonomous Agent Simulation Enviroment Support. Multiple build-in AI agent environment AI community, X(twitter) style mininal website for AI agents to interact (comment/like/follow/etc). 
 - Chat Visualizer: A Chatbot Visualizer with multiple mainstream chat(WhatsApp, WeChat, ChatGPT, etc.) UI
-
 
 ## Installation
 
@@ -25,6 +26,113 @@ agentboard
 
 # Change log dir and port agentboard --logdir=./log --static=./static --port=5000
 ```
+
+
+## AgentBoard Visualize Workflow of Agent Loop
+
+Let's start with an example of a basic asynchronously AI Agent Loop, consists of 3 stages: PLAN, ACT, REFLECT. 
+And plot the stage and result on a workflow chart on agentboard. We can use the basic Asynchronous Agent Loop in the AutoAgent Package, you can also use agentboard with many other agent framework, such as AutoGen and LangChain.
+
+Each line of log is written as dict with some fields, for example if we want to plot input, execution and output related information of PLAN stage of an agent loop.
+
+|agent name| process_id | name | data | data_type |
+|-------|-------|-------|-------|-------|
+|agent 1|PLAN|PLAN START|{"args1": "1", "args2": "2"}|agent_loop|
+|agent 1|PLAN|PLAN Execution|{"duration": "30"|agent_loop|
+|agent 1|PLAN|PLAN END|{"result": "2"|agent_loop|
+
+
+To use agentboard with basic Async Agent Class, we need to first rewrtie the agent with logger in the desired place.
+
+
+```
+    cd exmaples/async_agents/
+
+    # write logs and static file, default to ./log and ./static
+    python run_agentboard_autoagent.py
+
+    # run agentboard and visualize agent loop
+    agentboard --logdir=./log --static=./static --port=5000
+
+```
+
+
+![agentboard agent loop workflow](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
+
+
+
+## AgentBoard Log Messages Chat Visualizer
+
+Let's start with an example of calling OpenAI LLM api with user input prompt.
+
+```
+
+    import agentboard as ab
+
+    messages= []
+    logdir="./log"
+    with ab.summary.FileWriter(logdir=logdir) as writer:
+        prompt = "Can you give me an example of python code usage of async await functions"
+        messages.append({"role": "user", "content": prompt})
+
+        ## Calling OpenAI Chat Completion API            
+        #        completion = client.chat.completions.create(
+        #            model="gpt-3.5-turbo",
+        #            messages=[
+        #                {"role": "system", "content": "You are a helpful assistant."},
+        #                {"role": "user", "content": prompt}
+        #            ]
+        #        )
+
+        response_message = {"role":"assistant","content":"Sure! Here's an example of Python code that uses async/await functions:\n\n```python\nimport asyncio\n\nasync def print_numbers():\n    for i in range(1, 6):\n        print(i)\n        await asyncio.sleep(1)\n\nasync def main():\n    task1 = asyncio.create_task(print_numbers())\n    task2 = asyncio.create_task(print_numbers())\n    await task1\n    await task2\n\nasyncio.run(main())\n```\n\nIn this example, we define an async function `print_numbers` that prints the numbers 1 to 5 with a one-second delay between each number using `await asyncio.sleep(1)`. We also define an async function `main` that creates two tasks using `asyncio.create_task` to run the `print_numbers` function concurrently. We then use `await` to wait for both tasks to complete.\n\nWhen we run the `main` function using `asyncio.run(main())`, the numbers will be printed concurrently by the two tasks."}
+
+        messages.append(response_message)
+
+        ab.summary.messages(name="OpenAI Chat History", data=messages, agent_name="assistant")
+
+```
+
+Then you can go visit the agentboard (http://127.0.0.1:5000/log/messages) to see the chat visualizer of the chat completion history. 
+* Note the log writing --logdir and agentboard loading --logdir should match.
+
+
+![agentboard summary messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_chat_visualizer.jpg?raw=true)
+
+
+## AgentBoard Log Tools
+
+Let's start with an example of calling OpenAI Tool Usage API with user defined functions get_weather().
+
+```
+
+    import agentboard as ab
+    from agentboard.utils import function_to_schema
+
+    def calling_bing_tools(keyword:str, limit:int) -> str:
+        url="https://www.bing.com/search?q=%s&limit=%d" % (keyword, limit)
+        return url
+
+    with ab.summary.FileWriter(logdir="./log", static="./static") as writer:
+
+        tools = [calling_bing_tools]
+        tools_map = {tool.__name__:tool for tool in tools}
+        tools_schema = [function_to_schema(tool) for tool in tools]
+
+        ## Calling ChatGPT Tool Usage code omitted
+        # Omitted
+        # arguments = json.loads(tool_call['function']['arguments'])
+
+        arguments = {"keyword": "agentboard document", "limit": 10}
+
+
+        ab.summary.tool(name="Act RAG Tool Bing", data=[calling_bing_tools], agent_name="agent 2", process_id="ACT")
+        ab.summary.dict(name="Act RAG Argument Input", data=[arguments], agent_name="agent 2", process_id="ACT")
+
+```
+
+
+![agentboard tool function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_tool.jpg?raw=true)
+
 
 
 ## AgentBoard Display Image Tensor
@@ -86,120 +194,6 @@ with ab.summary.FileWriter(logdir="./log", static="./static") as writer:
 ```
 
 ![agentboard audio function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_video.jpg?raw=true)
-
-
-## AgentBoard Log Messages of OpenAI LLM API Calling
-
-Let's start with an example of calling OpenAI LLM api with user input prompt.
-
-```
-
-    import agentboard as ab
-
-    messages= []
-    logdir="./log"
-    with ab.summary.FileWriter(logdir=logdir) as writer:
-        prompt = "Can you give me an example of python code usage of async await functions"
-        messages.append({"role": "user", "content": prompt})
-
-        ## Calling OpenAI Chat Completion API            
-        #        completion = client.chat.completions.create(
-        #            model="gpt-3.5-turbo",
-        #            messages=[
-        #                {"role": "system", "content": "You are a helpful assistant."},
-        #                {"role": "user", "content": prompt}
-        #            ]
-        #        )
-
-        response_message = {"role":"assistant","content":"Sure! Here's an example of Python code that uses async/await functions:\n\n```python\nimport asyncio\n\nasync def print_numbers():\n    for i in range(1, 6):\n        print(i)\n        await asyncio.sleep(1)\n\nasync def main():\n    task1 = asyncio.create_task(print_numbers())\n    task2 = asyncio.create_task(print_numbers())\n    await task1\n    await task2\n\nasyncio.run(main())\n```\n\nIn this example, we define an async function `print_numbers` that prints the numbers 1 to 5 with a one-second delay between each number using `await asyncio.sleep(1)`. We also define an async function `main` that creates two tasks using `asyncio.create_task` to run the `print_numbers` function concurrently. We then use `await` to wait for both tasks to complete.\n\nWhen we run the `main` function using `asyncio.run(main())`, the numbers will be printed concurrently by the two tasks."}
-
-        messages.append(response_message)
-
-        ab.summary.messages(name="OpenAI Chat History", data=messages, agent_name="assistant")
-
-```
-
-Then you can go visit the agentboard (http://127.0.0.1:5000/log/message) to see the chat visualizer of the chat completion history. 
-* Note the log writing dir and agentboard loading logdir should match.
-
-
-![agentboard summary messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_chat_visualizer.jpg?raw=true)
-
-
-
-## AgentBoard Log Tools
-
-Let's start with an example of calling OpenAI Tool Usage API with user defined functions get_weather().
-
-```
-
-
-    import agentboard as ab
-    from agentboard.utils import function_to_schema
-
-    ## define tools as python functions
-    def check_weather(city: str) -> str:
-        weather = {"city": city, "temperature": "22°C", "condition": "Sunny"}
-        return weather
-
-    def get_delivery_date(order_id: str) -> datetime:
-        # Connect to the database
-        # conn = sqlite3.connect('ecommerce.db')
-        # cursor = conn.cursor()
-        delivery_date = "default_date_of_order_%s" % order_id
-        return delivery_date
-
-    tools = [get_delivery_date, check_weather]
-    tools_map = {tool.__name__:tool for tool in tools}
-    tools_schema = [function_to_schema(tool) for tool in tools]
-
-    # before running API start a with block
-    with ab.summary.FileWriter(logdir="./log") as writer:
-
-        prompt = "Can you help me check New York's weather?"
-
-        ## calling OpenAI for Tools Calls
-        # omitted...
-        # tool_calls = response.choices[0].message.tool_calls
-
-        cur_tool = check_weather
-        arguments = {"city": "New York"}
-        result = cur_tool(**arguments)
-
-        ## logs put these in the same process id "tool_execution" to display on agentboard in the same group of workflow
-        ab.summary.dict(name="Function Excecution Input from OpenAI Arguments", data = [arguments], process_id="tool_execution", agent_name="assistant")
-        ab.summary.tool(name="Function Excecution Function name %s" % cur_tool.__name__, data=[cur_tool], process_id="tool_execution", agent_name="assistant")
-        ab.summary.dict(name="Function Excecution Output", data = [result], process_id="tool_execution", agent_name="assistant")
-
-```
-
-
-![agentboard tool function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_tool.jpg?raw=true)
-
-
-## AgentBoard Visualize Workflow of Agent Loop
-
-Let's start with an example of a basic asynchronously AI Agent Loop, consists of 3 stages: PLAN, ACT, REFLECT. 
-And plot the stage and result on a workflow chart on agentboard. We can use the basic Asynchronous Agent Loop in the AutoAgent Package, you can also use agentboard with many other agent framework, such as AutoGen and LangChain.
-
-
-To use agentboard with basic Async Agent Class, we need to first rewrtie the agent with logger in the desired place.
-
-
-```
-    cd exmaples/async_agents/
-
-    # write logs and static file, default to ./log and ./static
-    python run_agentboard_autoagent.py
-
-    # run agentboard and visualize agent loop
-    agentboard --logdir=./log --static=./static --port=4000
-
-```
-
-
-
-![agentboard agent loop workflow]()
 
 
 
@@ -265,6 +259,7 @@ To use agentboard with basic Async Agent Class, we need to first rewrtie the age
 [Hyundai IONIQ 6](http://www.deepnlp.org/store/pub/pub-hyundai-ioniq-6) <br>
 
 ### Related Blogs <br>
+[AgentBoard AI Agent Visualization Toolkit](http://www.deepnlp.org/blog/agentboard-ai-agent-visualization-toolkit-agent-loop-workflow) <br>
 [DeepNLP AI Agents Designing Guidelines](http://www.deepnlp.org/blog?category=agent) <br>
 [Introduction to multimodal generative models](http://www.deepnlp.org/blog/introduction-to-multimodal-generative-models) <br>
 [Generative AI Search Engine Optimization](http://www.deepnlp.org/blog/generative-ai-search-engine-optimization-how-to-improve-your-content) <br>
@@ -274,4 +269,8 @@ To use agentboard with basic Async Agent Class, we need to first rewrtie the age
 [Best AI Tools User Reviews](http://www.deepnlp.org/store/pub/) <br>
 [AI Boyfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-boyfriend) <br>
 [AI Girlfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-girlfriend) <br>
+
+
+
+
 
