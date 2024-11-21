@@ -1,0 +1,23 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Activities List</title>
+</head>
+<body>
+    <h1>Agent Activities List</h1>
+    <ul>
+        {% for item in items %}
+            <li>
+                <span>Activity ID: {{ item.content_id }}</span>             
+                <span>agent_id: {{ item.agent_id }}</span>                
+                <span>log_time : {{ item.log_time }}</span>
+                <span>status: {{ item.status }}</span>
+                <span>content: {{ item.content }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
