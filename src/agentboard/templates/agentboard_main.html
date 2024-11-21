@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentBoard Panel</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/agent_board_log.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/chat_visualizer.css') }}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/common.js') }}"></script>
+
+    <script type="text/javascript">
+
+        function setSideBar() {
+            // body...
+            // Get the elements
+            const sidebar = document.getElementById('sidebar');
+            const openBtn = document.getElementById('open-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const mainContent = document.getElementById('main-content');
+
+            // Open sidebar function
+            openBtn.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                mainContent.classList.add('shifted');
+            });
+
+            // Close sidebar function
+            closeBtn.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                mainContent.classList.remove('shifted');
+            });
+        };
+                
+
+        function run_format_dialogue() {
+            // clear chatbot
+            var divMessagesDisplay = document.querySelector(".div_messages_display");
+            displayDialogueFromJson(divMessagesDisplay.innerText);
+        }
+
+
+        window.onload = function() {
+            // display all the json
+            display_all_json();
+            // display json first tab
+            clickCompareLi(0);
+            // set side
+            setSideBar();
+            // update
+            run_format_dialogue();
+        };
+
+    </script>
+
+
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar open" id="sidebar">
+        <span class="close-btn" id="close-btn">&times;</span>
+        <a href="/log">AgentBoard</a>
+        {% for data_type in types %}
+            <a href="/log/{{data_type}}"> {{ data_type }}</a>
+        {% endfor %}
+        <a href="/log/agent_loop">agent loop</a>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content shifted" id="main-content">
+        <!-- Button to open the sidebar -->
+        <button class="open-btn" id="open-btn">&#9776;</button>
+        <h1>AgentBoard</h1>
+
+        <div id="alert_box">
+            <div id="alert_box_middle_wrapper">
+                <img id="bgImg" onclick="bgImgClick()">
+                <span id="closeButton" onclick="bgImgClick();" style="position: absolute; top: 0; right: 0; font-size: 18px; color:white; padding: 5px;"><strong>X</strong></span>
+            </div>
+        </div>
+
+        <div class="div_content_wrapper">
+
+            <div>
+                <!-- switch tab for agent -->
+                <ul class="compareTabUl">
+                    {% for agent_name, agent_dict in data.items() %}
+                        <li class="compareTabLi tabLiClickColor" onclick="clickCompareLi({{loop.index-1}})">
+                            <a>{{ agent_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <!-- switch tab content agent -->
+                <div class="compareTabMain">
+                    {% for agent_name, agent_dict in data.items() %}
+                        <div class="compareTabItem" style="display: block;">
+
+                        {% for group, item_list in agent_dict.items() %}
+
+                            <h3>{{ group }}</h3>
+                            <!-- group: agent_loop -->
+                            <!-- group: text,image,audio,tools, display in grid layout -->
+                            <div class="div_content_wrapper_grid_row">
+                                    {% for item in item_list %}
+
+                                        {% if item.data_type == "image" %}
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <img src="{{ url_for('static', filename='img/' ~ item.data) }}" alt="" class="div_content_card_image" onclick="showBgImg(this)">
+                                            </div>
+                                        {% elif item.data_type == "audio" %}
+
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <audio src="{{ url_for('static', filename='audio/' ~ item.data) }}" controls preload="metadata" class="div_content_card_audio">Audio</audio>
+                                            </div>
+
+                                        {% elif item.data_type == "video" %}
+                                            
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <video class="div_content_card_video" controls autoplay loop muted>
+                                                    <source src="{{ url_for('static', filename='video/' ~ item.data) }}" type="video/mp4">
+                                                </video>
+                                            </div>
+
+                                        {% elif item.data_type == "dict" %}                            
+
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <div class="div_content_card_text code-container">
+                                                    <pre id="code_{{ item.workflow_id }}" class="div_p_json">{{ item.data }}</pre>
+                                                    <button class="copy-btn" onclick="copyCode('code_{{ item.workflow_id }}')">Copy</button>
+                                                </div>
+                                            </div>
+
+                                        <!-- tool schema tag -->
+                                        {% elif item.data_type == "tool" %}                            
+
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <div class="div_content_card_text code-container">
+                                                    <pre id="code_{{ item.workflow_id }}" class="div_p_json">{{ item.data }}</pre>
+                                                    <button class="copy-btn" onclick="copyCode('code_{{ item.workflow_id }}')">Copy</button>
+                                                </div>
+                                            </div>
+
+                                        <!-- messages schema tag -->
+                                        {% elif item.data_type == "messages" %}                            
+
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <div class="div_content_card_text code-container">
+                                                    <pre id="code_{{ item.workflow_id }}" class="div_p_json div_messages_display">{{ item.data }}</pre>
+                                                    <button class="copy-btn" onclick="copyCode('code_{{ item.workflow_id }}')">Copy</button>
+                                                </div>
+                                            </div>
+
+                                            <button class="chatbot-toggler">
+                                              <span class="material-symbols-rounded">BOT</span>
+                                              <span class="material-symbols-outlined">Close</span>
+                                              <br>
+                                            </button>
+
+                                            <div id="div_chatbot_id" class="chatbot">
+                                              <header>
+                                                <a id="div_chatbot_title_a">Chat Visualizer</a>
+                                                <span class="close-btn material-symbols-outlined">close</span>
+                                              </header>
+                                              <div class="div_chatbox_content_wrapper">
+                                                <ul class="chatbox">
+                                                </ul>
+                                              </div>
+                                              <div class="chat-input">
+                                                <textarea placeholder="Enter a message..." spellcheck="false" required></textarea>
+                                                <span id="send-btn" class="material-symbols-rounded">send</span>
+                                              </div>
+                                            </div>                                   
+
+                                        {% else %}
+
+                                            <div class="div_content_wrapper_grid_card">
+                                                <h4>{{ item.name }} </h4>
+                                                <div class="div_content_card_text"><p>{{ item.data }}</p></div>
+                                            </div>
+                                        
+                                        {% endif %}
+                                    
+                                    {% endfor %}
+                            </div>
+
+                        {% endfor %}
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- flask js import after dom rendering -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chat_visualizer.js') }}"></script>
+
+
+</body>
+</html>
+
