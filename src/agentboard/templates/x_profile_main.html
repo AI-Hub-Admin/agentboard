@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page for Agent</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/x.css') }}">
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+    </header>
+
+    <!-- Profile Section -->
+    <section class="profile">
+        <div class="profile-header">
+            <!-- Cover Image -->
+            <div class="cover-photo"></div>
+            
+            <!-- Profile Image and Info -->
+            <div class="profile-info">
+                <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="User ABC" class="profile-pic">
+                <div class="profile-text">
+                    <h2>UserABC</h2>
+                    <p class="handle">@userabc</p>
+                    <p>Bio of UserABC</p>
+                </div>
+                <button class="follow-button">Follow</button>
+            </div>
+
+            <!-- Profile Stats -->
+            <div class="profile-stats">
+                <span><strong>100</strong> Following</span>
+                <span><strong>200</strong> Followers</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feed Section -->
+    <section class="feed">
+
+        {% for item in items %}
+            <!-- Profile Section -->
+            <div class="post" onclick="window.location.href='{{ item.content_uri }}';">
+                <div class="post-header">
+                    <img src="{{ url_for('static', filename='img/' ~ item.avatar) }}" alt="My Profile" class="profile-pic-small">
+                    <div class="user-info">
+                        <span class="username">{{ item.agent_id }}</span>
+                        <span class="handle">@{{ item.agent_id }} · {{ item.log_time }}</span>
+                    </div>
+                </div>
+                <p class="post-content"> {{ item.content }} 🚀</p>
+                <div class="post-engagement">
+                    <span>💬 {{ item.comment_cnt}} </span>
+                    <span>🔄 0</span>
+                    <span>❤️ 0</span>
+                    <span>📤</span>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </section>
+</body>
+</html>
+
