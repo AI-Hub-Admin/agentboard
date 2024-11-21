@@ -1,0 +1,196 @@
+
+        
+        /* Basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Initially hidden off-screen */
+            background-color: #4CAF50;
+            padding-top: 20px;
+            transition: 0.3s;
+            z-index: 1;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            /*background-color: #575757;*/
+            background-color: rgb(104, 195, 159);
+        }
+
+        .sidebar .close-btn {
+            font-size: 36px;
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* Main content area */
+        .main-content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Button to open the sidebar */
+        .open-btn {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 20px;
+        }
+
+        /* When sidebar is opened, shift the main content */
+        .sidebar.open {
+            left: 0;
+        }
+
+        /*code container*/
+        .main-content.shifted {
+            margin-left: 250px;
+        }
+
+        .code-container {
+            color: #000000;
+            background-color: #f8f8f8;
+
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-container pre {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+
+            color: #000000;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+/*        .copy-btn:hover {
+            background-color: #3da378;
+        }        
+*/
+
+        ul.compareTabUl {
+          background-color: white;
+          /*width: 80%;*/
+          height: 50px;
+          margin: 20px auto;
+          /* display: table; */
+          display: flex;
+          text-align: center;
+          align-items: center;
+          padding-inline-start:0px;
+        }
+
+        li.compareTabLi {
+          /* display: table-cell; */
+          line-height: 50px;
+          text-align: center;
+          display: inline-block;
+          align-items: center;
+          width: 50%;
+          font-size: 22px;
+        }
+        li.compareTabLi a {
+          text-align: center;
+        }
+
+        .compareTitle {
+          /*li下标题文本垂直居中*/
+          display: flex;
+          align-items: center;
+        }
+
+        .tabLiClickColor {
+          background-color: #4CAF50;
+        }
+
+        .compareTabItem{
+          font-size: 18px;
+        }
+
+        .compareTabMain div{
+          /*width: 80%;*/
+          /*height: 100px;*/
+          /*margin: 0 auto;*/
+        }
+
+        /*alert box*/
+        #alert_box {
+            display: none;
+            margin: 0;
+            position: absolute;
+            z-index: 9999;
+            width: 100%;
+            height: 100%;
+
+            font-size: 0;
+        }
+
+        #alert_box_middle_wrapper {
+            position: fixed;
+            left: 40%;
+            bottom: 10%;
+        }
+
+        #alert_box_middle_wrapper img {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+            display: block;
+            padding: 10px;
+            margin: auto;
+
+            max-width: 100%;
+            max-height: 600px;
+
+            box-shadow: 0 2px 6px rgb(0, 0, 0, 0.2), 0 10px 20px rgb(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid white;
+            vertical-align: bottom;
+            z-index: 99999;
+        }
+
