@@ -1,0 +1,27 @@
+
+.div_content_wrapper_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 10px;
+}
+
+.div_content_wrapper_grid_row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.div_content_card_image {
+    /*max-height: 50px;*/
+    max-width: 300px;
+}
+
+.div_content_card_audio {
+    max-width: 300px;
+}
+
+.div_content_card_video {
+    max-width: 300px;
+}
+
