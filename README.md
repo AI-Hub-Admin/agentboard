@@ -1,9 +1,9 @@
 # AgentBoard: AI Agent Visualization Toolkit 
 
-DeepNLP AgentBoard provides the visualization and tooling to visualize and monitor the agent loops and key entities of AI Agents development, such as messages, tools/functions, workflow and raw data types including text, dict or json, image, audio, video, etc. 
+DeepNLP AgentBoard provides the visualization and toolkit to visualize and monitor the AI Agents and key entities such as chat messages, agent loop, tools/functions, workflow and raw data types including text, dict or json, image, audio, video, etc. 
 
 ## Key Features
-- Easy APIs to log various data types for LLM calling and AI Agent development: text, dict or json, image, audio, video, etc. 
+- APIs to log various data types for LLM calling and AI Agent development: text, dict or json, image, audio, video, etc. 
 - AI Agent Key Entities Visualization: Visualize key entities of chat history messages, memories, tools/functions schema and input/output dict, etc.
 - Workflow of AI Agent Loop Running, Visualize the plan/act/react/reflect stage in the complete workflow chart. Can be modified and displayed for papers and technical reports.
 - Multi-Agents Support
@@ -19,12 +19,13 @@ You can install and import the 'agentboard' python package and use functions und
 [DeepNLP AgentBoard Python Full API Docs](docs/agentboard_docs.md)
 
 
-## AgentBoard Supported AI Agent Loop Elements and Data Types
+## AgentBoard Supported AI Agent Elements and Data Types
 
 |  Functions  | DataType |  Description  |
 |  -------- | --------  | --------  |
 |  [**ab.summary.messages**](#absummarymessages) | message |   List of messages, json format [{"role": "user", "content": "content_1"}, {"role": "assistant", "content": "content_2"}] |
 |  [**ab.summary.tool**](#absummarytool) |  function |   User defined functions, The schema of the functions which are passed to LLM API calling, Support OpenAI and Anthropic stype  |
+|  [**ab.summary.agent_loop**](#absummaryagentloop) |  str |   User defined Agent Loop with various stages PLAN/ACT/REFLECT/etc  |
 |  [**ab.summary.text**](#absummarytext)  |  str |   Text data, such as prompt, assistant responded text  |
 |  [**ab.summary.dict**](#absummarydict)  |  dict  |   Dict data, such as input request, output response, class __dict__ |
 |  [**ab.summary.image**](#absummaryimage)  | tensor |   Support both torch.Tensor and tf.Tensor,  torch.Tensor takes input shape [N, C, H, W], N: Batch Size, C: Channels, H: Height, W: Width; tf.Tensor, input shape [N, H, W, C], N: Batch Size, H: Height, W: Width, C: Channels.  |
@@ -33,7 +34,7 @@ You can install and import the 'agentboard' python package and use functions und
 
 ## Installation
 
-You can install agentboard through pip and start the Flask based web app using the command line agentboard, the port can be changed with "--port=5000" parameters.
+You can install agentboard through pip and start the Flask based web app using the command line agentboard. You can change 'logdir', 'logfile', 'static' and 'port' parameters to point to your folders. 
 After installation, you can visit (http://127.0.0.1:5000) to see the web console of agentboard. There is build in log file to visualize multiple data types.
 
 ```
@@ -43,11 +44,11 @@ pip install agentboard
 # cmd line start service
 agentboard
 
-# Change log dir and port agentboard --logdir=./log --static=./static --port=5000
+# Change log dir and port agentboard --logdir=./log --logfile=xxx.log --static=./static --port=5000
 ```
 
 
-## AgentBoard Log Messages of OpenAI LLM API Calling
+## AgentBoard Log Messages Chat Visualizer
 
 Let's start with an example of calling OpenAI LLM api with user input prompt.
 
@@ -78,15 +79,39 @@ Let's start with an example of calling OpenAI LLM api with user input prompt.
 
 ```
 
-Then you can go visit the agentboard (http://127.0.0.1:5000/log/message) to see the chat visualizer of the chat completion history. 
-* Note the log writing dir and agentboard loading logdir should match.
+Then you can go visit the agentboard (http://127.0.0.1:5000/log/messages) to see the chat visualizer of the chat completion history. 
+* Note the log writing --logdir and agentboard loading --logdir should match.
 
 
 ![agentboard summary messages function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_chat_visualizer.jpg?raw=true)
 
 
+## AgentBoard Agent Loop Visualization
 
-## AgentBoard Log Tools
+Let's start with an example of a basic asynchronously AI Agent Loop, consists of 3 stages: PLAN, ACT, REFLECT. 
+And plot the stage and result on a workflow chart on agentboard. We can use the basic Asynchronous Agent Loop in the AutoAgent Package, you can also use agentboard with many other agent framework, such as AutoGen and LangChain.
+
+
+To use agentboard with basic Async Agent Class, we need to first rewrtie the agent with logger in the desired place.
+
+
+```
+    cd /examples/async_agents/
+
+    # write logs and static file, default to ./log and ./static
+    python run_agentboard_autoagent.py
+
+    # run agentboard and visualize agent loop
+    agentboard --logdir=./log --static=./static --port=5000
+
+```
+
+visit the agentboard (http://127.0.0.1:5000/log/agent_loop) 
+
+![agentboard agent loop workflow](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
+
+
+## AgentBoard to log Tools Function Calls
 
 Let's start with an example of calling OpenAI Tool Usage API with user defined functions get_weather().
 
@@ -96,39 +121,25 @@ Let's start with an example of calling OpenAI Tool Usage API with user defined f
     import agentboard as ab
     from agentboard.utils import function_to_schema
 
-    ## define tools as python functions
-    def check_weather(city: str) -> str:
-        weather = {"city": city, "temperature": "22°C", "condition": "Sunny"}
-        return weather
+    def calling_bing_tools(keyword:str, limit:int) -> str:
+        url="https://www.bing.com/search?q=%s&limit=%d" % (keyword, limit)
+        return url
 
-    def get_delivery_date(order_id: str) -> datetime:
-        # Connect to the database
-        # conn = sqlite3.connect('ecommerce.db')
-        # cursor = conn.cursor()
-        delivery_date = "default_date_of_order_%s" % order_id
-        return delivery_date
+    with ab.summary.FileWriter(logdir="./log", static="./static") as writer:
 
-    tools = [get_delivery_date, check_weather]
-    tools_map = {tool.__name__:tool for tool in tools}
-    tools_schema = [function_to_schema(tool) for tool in tools]
+        tools = [calling_bing_tools]
+        tools_map = {tool.__name__:tool for tool in tools}
+        tools_schema = [function_to_schema(tool) for tool in tools]
 
-    # before running API start a with block
-    with ab.summary.FileWriter(logdir="./log") as writer:
+        ## Calling ChatGPT Tool Usage code omitted
+        # Omitted
+        # arguments = json.loads(tool_call['function']['arguments'])
 
-        prompt = "Can you help me check New York's weather?"
+        arguments = {"keyword": "agentboard document", "limit": 10}
 
-        ## calling OpenAI for Tools Calls
-        # omitted...
-        # tool_calls = response.choices[0].message.tool_calls
 
-        cur_tool = check_weather
-        arguments = {"city": "New York"}
-        result = cur_tool(**arguments)
-
-        ## logs put these in the same process id "tool_execution" to display on agentboard in the same group of workflow
-        ab.summary.dict(name="Function Excecution Input from OpenAI Arguments", data = [arguments], process_id="tool_execution", agent_name="assistant")
-        ab.summary.tool(name="Function Excecution Function name %s" % cur_tool.__name__, data=[cur_tool], process_id="tool_execution", agent_name="assistant")
-        ab.summary.dict(name="Function Excecution Output", data = [result], process_id="tool_execution", agent_name="assistant")
+        ab.summary.tool(name="Act RAG Tool Bing", data=[calling_bing_tools], agent_name="agent 2", process_id="ACT")
+        ab.summary.dict(name="Act RAG Argument Input", data=[arguments], agent_name="agent 2", process_id="ACT")
 
 ```
 
@@ -136,9 +147,9 @@ Let's start with an example of calling OpenAI Tool Usage API with user defined f
 ![agentboard tool function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_tool.jpg?raw=true)
 
 
-## AgentBoard Display Image Tensor
+## AgentBoard to Display Image Tensor
 
-Let's log a random pytorch tensor with shape [8, 3, 400, 600] and display it in the agentboard.
+Let's log a random pytorch tensor with shape [8, 3, 400, 600] and display the batch image tensors on the agentboard.
 
 ```
 import torch
@@ -196,31 +207,6 @@ with ab.summary.FileWriter(logdir="./log", static="./static") as writer:
 
 ![agentboard audio function](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_video.jpg?raw=true)
 
-
-
-## AgentBoard Visualize Workflow of Agent Loop
-
-Let's start with an example of a basic asynchronously AI Agent Loop, consists of 3 stages: PLAN, ACT, REFLECT. 
-And plot the stage and result on a workflow chart on agentboard. We can use the basic Asynchronous Agent Loop in the AutoAgent Package, you can also use agentboard with many other agent framework, such as AutoGen and LangChain.
-
-
-To use agentboard with basic Async Agent Class, we need to first rewrtie the agent with logger in the desired place.
-
-
-```
-    cd exmaples/async_agents/
-
-    # write logs and static file, default to ./log and ./static
-    python run_agentboard_autoagent.py
-
-    # run agentboard and visualize agent loop
-    agentboard --logdir=./log --static=./static --port=4000
-
-```
-
-
-
-![agentboard agent loop workflow]()
 
 
 
@@ -286,6 +272,7 @@ To use agentboard with basic Async Agent Class, we need to first rewrtie the age
 [Hyundai IONIQ 6](http://www.deepnlp.org/store/pub/pub-hyundai-ioniq-6) <br>
 
 ### Related Blogs <br>
+[AgentBoard AI Agent Visualization Toolkit](http://www.deepnlp.org/blog/agentboard-ai-agent-visualization-toolkit-agent-loop-workflow) <br>
 [DeepNLP AI Agents Designing Guidelines](http://www.deepnlp.org/blog?category=agent) <br>
 [Introduction to multimodal generative models](http://www.deepnlp.org/blog/introduction-to-multimodal-generative-models) <br>
 [Generative AI Search Engine Optimization](http://www.deepnlp.org/blog/generative-ai-search-engine-optimization-how-to-improve-your-content) <br>
@@ -295,6 +282,4 @@ To use agentboard with basic Async Agent Class, we need to first rewrtie the age
 [Best AI Tools User Reviews](http://www.deepnlp.org/store/pub/) <br>
 [AI Boyfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-boyfriend) <br>
 [AI Girlfriend User Reviews](http://www.deepnlp.org/store/chatbot-assistant/ai-girlfriend) <br>
-
-
 
