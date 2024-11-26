@@ -1,6 +1,9 @@
 # AgentBoard: AI Agent Visualization Toolkit 
 
-DeepNLP AgentBoard provides the visualization and toolkit to visualize and monitor the AI Agents and key entities such as chat messages, agent loop, tools/functions, workflow and raw data types including text, dict or json, image, audio, video, etc. 
+DeepNLP AgentBoard provides the toolkit of visualization of AI Agents Worflow, which helps visualize and monitor the AI Agents running loop and key entities such as chat messages, tools/functions, RAG(Retrieval Augmented Generation), workflow and raw data types including text, dict or json, image, audio, video, etc. 
+
+![agentboard agent loop workflow](https://github.com/AI-Hub-Admin/agentboard/blob/main/docs/demo_agentboard_loop_workflow_hint.jpg?raw=true)
+
 
 ## Key Features
 - APIs to log various data types for LLM calling and AI Agent development: text, dict or json, image, audio, video, etc. 
